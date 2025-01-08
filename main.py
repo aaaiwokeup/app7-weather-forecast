@@ -15,16 +15,18 @@ if st.session_state['day'] == 1:
 else:
     st.header(f"Temperature for the next {st.session_state['day']} days in {town}")
 
-weather_data, date = get_data(place=town, forecast_days=st.session_state['day'], option=option)
+try:
+    weather_data, date = get_data(place=town, forecast_days=st.session_state['day'], option=option)
 
-if option == "Temperature":
-    figure = px.line(x=date, y=weather_data, labels={"x": "Date", "y": "Temperature ℃"})
-
-    st.plotly_chart(figure)
-elif option == "Sky":
-    images = {"Clear": "images/clear.png", "Clouds": "images/clouds.png",
-              "Rain": "images/rain.png", "Snow": "images/snow.png"}
-    sky_conditions = [images[condition] for condition in weather_data]
-    st.image(sky_conditions, caption=date, width=115)
-else:
-    st.warning("What?" ,icon="⚠️")
+    if option == "Temperature":
+        figure = px.line(x=date, y=weather_data, labels={"x": "Date", "y": "Temperature ℃"})
+        st.plotly_chart(figure)
+    elif option == "Sky":
+        images = {"Clear": "images/clear.png", "Clouds": "images/clouds.png",
+                  "Rain": "images/rain.png", "Snow": "images/snow.png"}
+        sky_conditions = [images[condition] for condition in weather_data]
+        st.image(sky_conditions, caption=date, width=115)
+    else:
+        st.warning("What?" ,icon="⚠️")
+except KeyError:
+    st.warning("That place does not exist!", icon="⚠️")

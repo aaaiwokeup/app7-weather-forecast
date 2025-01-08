@@ -9,8 +9,10 @@ def get_data(place, forecast_days, option):
     url = f"http://api.openweathermap.org/data/2.5/forecast?q={place}&appid={API_KEY}&units=metric"
     response = requests.get(url)
     data = response.json()
+
     filtered_data = data["list"]
     filtered_by_days = filtered_data[:8 * forecast_days]
+
     if option == "Temperature":
         temperature_data = [item["main"]["temp"] for item in filtered_by_days]
         date_data = [item["dt_txt"] for item in filtered_by_days]
